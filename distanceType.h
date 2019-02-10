@@ -1,5 +1,5 @@
-#ifndef distanceType_H
-#define distanceType_H
+#ifndef H_distanceType
+#define H_distanceType
 
 #include <iostream>
 #include <string>
