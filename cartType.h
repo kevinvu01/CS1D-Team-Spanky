@@ -1,5 +1,5 @@
-#ifndef cartType_H
-#define cartType_H
+#ifndef H_cartType
+#define H_cartType
 
 #include <iostream>
 #include <string>
