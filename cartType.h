@@ -4,13 +4,15 @@
 #include <iostream>
 #include <string>
 
-#include "programmerType.h"
-#include "softwareArchitectType.h"
-
-
 using namespace std;
 
+class cartType{
+public: 
+  
+private:
 
+
+};
 
 
 #endif
