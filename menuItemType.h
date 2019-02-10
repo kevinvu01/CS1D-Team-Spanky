@@ -1,5 +1,5 @@
-#ifndef menuItemType_H
-#define menuItemType_H
+#ifndef H_menuItemType
+#define H_menuItemType
 
 #include <iostream>
 #include <string>
