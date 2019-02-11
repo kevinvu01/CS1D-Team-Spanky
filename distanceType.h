@@ -8,9 +8,11 @@ using namespace std;
 
 class distanceType{
 public: 
-  
-private:
+void setDistance(double distance);
+double getDistance();
 
+private:
+double distance; 
 
 };
 
