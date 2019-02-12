@@ -8,9 +8,15 @@ using namespace std;
 
 class cartType{
 public: 
+  void print();
+  
+  
   
 private:
-
+  int qty;
+  double price;
+  
+  
 
 };
 
