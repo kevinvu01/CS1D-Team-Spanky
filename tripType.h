@@ -8,8 +8,8 @@ using namespace std;
 class tripType{
 public: 
   void print();
-  void getDistance;
-  void setDistance;
+  void setDistance(double distance);
+  double getDistance();
   
   
 private:
