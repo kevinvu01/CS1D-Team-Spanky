@@ -8,10 +8,13 @@ using namespace std;
 
 class menuItemType{
 public: 
+  menuItemType();
+  menuItemType(const menuItemType &);
   
+  void print();
 private:
-
-
+  string name;
+  double price;
 };
 
 
