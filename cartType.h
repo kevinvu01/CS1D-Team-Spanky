@@ -1,23 +1,20 @@
 #ifndef H_cartType
 #define H_cartType
 
+#include "menuItemType.h"
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
 class cartType{
 public: 
-  void print();
-  
-  
-  
+  void printContents();
+  void selectionMenu();
 private:
-  int qty;
-  double price;
-  
-  
-
+  double total;
+  vector <menuItemType> cart;
 };
 
 
