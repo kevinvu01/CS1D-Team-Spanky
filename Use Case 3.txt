@@ -1,0 +1,49 @@
+Team Spanky
+
+Use Case 3 - Change menu price
+
+Actors: 
+	-administrator
+	-file system
+	-the program
+
+Triggers: 
+	-The administrator chooses to change a menu item from the data modification screen
+
+Precondition:
+	- The admin successfully logs in with password
+	- The user selects to change restaurant menu item
+
+Postconditions:
+	- The administrator changes either the name of menu item, its prce, or both
+	- The data is saved to file once the program terminates
+
+Normal Flow:
+	1. The user (administrator) selects the option to modify menu item
+	2. The program prompts user to select restaurant that has the item 
+	3. The program displays a list of food items
+	4. User selects which menu item to modify
+	5. Program displays current values for the food item
+	6. User selects which aspect of the item to modify(name, price, or exit)
+	7. User enters in new value
+	8. Program displays values for the item after the change
+	9. User makes modifications until satisfied
+	10. User selects to exit to restaurant list
+	11. Program returns to restaurant menu item list 
+	12. User selects to return to main modifications menu
+	13. Program returns to said menu with updated data structures for the menu changes
+	14. File system takes in the new data from the data structures upon program exit
+
+Alternate Flows
+	2A: User decides to back out with no changes
+	4A: User selected wrong restaurant
+		1. User selects to return to restaurant list
+		2. User selects correct restaurant
+	6A: User backs out with no changes
+	7A: User enters in invalid input (negative price)
+		1. Program displays error message and keep old value
+		2. Program prompts for new value
+		3. User enters new value
+	11A: User selects to edit more menu items from different restaurants - repeat steps 2-10
+	
+	
