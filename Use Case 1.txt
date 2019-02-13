@@ -1,0 +1,41 @@
+Team Spanky 
+
+Use Case 1 - Plan trip from Dominos
+
+Actors: Foodie
+
+Triggers:
+	- The user selects the option to plan a trip starting at Dominos and going to the 
+	  other fast food places they had selected
+
+Preconditions:
+	- user has selected the restaurants to be visited
+	- user has selected to Dominos to be the starting point
+	- user hasnt selected the same restaurant twice
+
+Post-conditions:
+	- a queue is populated of the selected restaurants in order to be visited based 
+	  on shortest distance
+	- user is sent to menu to purchase food items at each restaurant
+
+Normal flow:
+	1. The user will select the option to start trip after 
+	   selecting the restaurants to visit and starting point
+	2. The program will populate a queue using a sorting algorithm
+	3. The program will display the trip order and total distance
+	4. The user will select to start the trip (or exit to main menu)
+	5. The user will be presented with menus from each restaurant 
+	6. The user will populate a cart of items to purchase
+	7. The program will show the totals of each restaurant cart
+	8. The program will show the grand total of the whole cart
+	9. The program will show the trip was completed and returned to main menu
+
+ALternate Flows: 
+	1A: The user can select a different starting restaurant. Program will flow normally otherwise
+	1B: The user can select only Dominos. Where the sorting function will not execute
+		1. program will display the distance to Dominos
+		2. steps 4 - 9 execute normally except only one food menu and total will display
+	4A: The user selects to exit the trip and returns to main menu
+	6A: The user decides to not purchase food and no totals are presented
+
+ 
