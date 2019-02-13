@@ -5,6 +5,7 @@ Use Case 2 - Add restaurant
 Actors: 
 	-administrator
 	-file system
+	-the program
 
 Triggers: 
 	-The administrator chooses to add a restaurant from the data modification screen
@@ -27,6 +28,7 @@ Normal Flow:
 	7. Program displays the info and is asked to save (or discard)
 	8. Program stores the data into the data structure for the restaurants
 	9. User is returned to the modifications screen
+	10. File system takes in the new data from the data structures
 
 Alternate Flows
 	7A: the user chooses to discard and returns to main modifications menu
