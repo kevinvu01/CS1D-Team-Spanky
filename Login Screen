@@ -1,0 +1,106 @@
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+ 
+#include <QMainWindow>
+#include "secdialog.h"
+namespace Ui {
+class MainWindow;
+}
+ 
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+ 
+public:
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
+ 
+private slots:
+    void on_pushButton_Login_clicked();
+ 
+private:
+    Ui::MainWindow *ui;
+    SecDialog *secDialog;
+};
+ 
+#endif // MAINWINDOW_H
+
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+#include <QMessageBox>
+#include <QPixmap>
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+    QPixmap pix(":/resources/img/login-icon.png");
+    int w = ui->label_pic->width();
+    int h = ui->label_pic->height();
+    ui->label_pic->setPixmap(pix.scaled(w,h,Qt::KeepAspectRatio));
+ 
+}
+ 
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+ 
+void MainWindow::on_pushButton_Login_clicked()
+{
+    QString username = ui->lineEdit_username->text();
+    QString password = ui->lineEdit_password->text();
+ 
+    if(username ==  "admin" && password == "JLebowitz") {
+        QMessageBox::information(this, "Login", "Username and password is correct");
+        //hide();
+        secDialog = new SecDialog(this);
+        secDialog->show();
+    }
+    else {
+        QMessageBox::warning(this,"Login", "Username and password is not correct");
+    }
+    
+    #ifndef SECDIALOG_H
+#define SECDIALOG_H
+ 
+#include <QDialog>
+ 
+namespace Ui {
+class SecDialog;
+}
+ 
+class SecDialog : public QDialog
+{
+    Q_OBJECT
+ 
+public:
+    explicit SecDialog(QWidget *parent = 0);
+    ~SecDialog();
+ 
+private:
+    Ui::SecDialog *ui;
+};
+ 
+#endif // SECDIALOG_H
+
+#include "secdialog.h"
+#include "ui_secdialog.h"
+ 
+SecDialog::SecDialog(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::SecDialog)
+{
+    ui->setupUi(this);
+}
+ 
+SecDialog::~SecDialog()
+{
+    delete ui;
+}
+
+<RCC>
+    <qresource prefix="/resources">
+        <file>img/login-icon.png</file>
+    </qresource>
+</RCC>
