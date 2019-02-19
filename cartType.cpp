@@ -1,8 +1,8 @@
 #include "cartType.h"
 
-cartType:: printContents(){
+void cartType:: printContents(){
   cout<< "The total is:";
 }
-cartType:: selectionMenu(){
+void cartType:: selectionMenu(){
   cout<< "The menu ";
 }
