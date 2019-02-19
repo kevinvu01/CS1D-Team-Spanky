@@ -11,6 +11,10 @@ public:
   menuItemType();
   menuItemType(const menuItemType &);
   
+  void setName(string);
+  
+  string getName;
+  
   void print();
 private:
   string name;
