@@ -14,9 +14,12 @@ public:
   void save();
   void inFile();
   void printMenu();
+  void setName(string);
+  void setDistance(double);
   double getDistance();
   string getName();
   void printCart();
+  
 private:
   DLinkedList <MenuItemType> menu;
   DistanceType map;
