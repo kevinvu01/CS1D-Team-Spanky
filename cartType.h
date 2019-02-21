@@ -1,21 +1,36 @@
+
 #ifndef H_cartType
 #define H_cartType
 
 #include "menuItemType.h"
-#include <iostream>
+#include "restaurantType.h"
+#include <iostream>  
+#include <iomanip>
 #include <string>
-#include <vector>
+
 
 using namespace std;
 
-class cartType{
+class cartType: public restaurantType
+{
+	using restaurantType::cart;
 public: 
+  cartType();
+  cartType(vector <menuItemType>, double);
+  
+  const cartType& operator=(const cartType &);
+  
+  double getTotal();
   void printContents();
-  void selectionMenu();
+  void selectionMenu(const restaurantType &);
+  void checkout(const restaurantType &);
+  
 private:
   double total;
-  vector <menuItemType> cart;
 };
 
+int IntInput(string inMsg,    //menu prompt
+	const int MIN, //minimum value allowed
+	const int MAX) //maximum value allowed
 
 #endif
