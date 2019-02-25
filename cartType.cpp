@@ -1,13 +1,13 @@
 #include "cartType.h"
 
 cartType::cartType()
-		: cart()
+		: restaurantType()
 {
 	total = 0;
 }
 
-cartType::cartType(vector <menuItemType> c, double tot)
-		: cart(c)
+cartType::cartType(vector <menuItemType> c, const distanceType& d, const vector<menuItemType> & m, int restCode, string name, double rev, double tot)
+		: restaurantType(c, d, m, restCode, name, rev)
 {
 	total = tot;
 }
@@ -20,30 +20,47 @@ const cartType& cartType::operator=(const cartType& other)
 	return *this;
 }
 
-void cartType::printContents()
+void cartType::updateRevenue()
 {
+	revenue += total;
+}
+
+void cartType::printCart()
+{
+	cout << name << endl;
 	cout << "Your cart:\n";
 	
 	for(int i = 1; i <= cart.size(); i++)
 	{
 		cout << "<" << i << "> ";
-		cart[i].print();
+		cart[i - 1].print();
 	}
+
+	cout << setprecision(2) << fixed 
+		 << "Total: $" << total << endl;
 }
-	
+
 void cartType::selectionMenu()
 {
 	int choice = 0;
+	vector<menuItemType>::iterator it = cart.begin();
+
 	
 	do{
-		cout << "<0> Back\n";
-		printContents();
+		printCart();
 		cout << "<" << cart.size() << "> Checkout\n";
+		cout << "<0> Back\n";
 		
 		choice = IntInput("Choose whch to delete: ", 0, cart.size());
 		
-		if(choice > 0 && choice != cart.aize())
-			cart.erase(choice);
+		if(choice > 0 && choice != cart.size())
+		{
+			it = cart.begin();
+			while(!(*it == menu[choice - 1]))
+				++it;
+
+			cart.erase(it);
+		}
 		else if(choice == cart.size())
 			checkout();
 		else 
@@ -59,7 +76,7 @@ void cartType::checkout()
 		total += it->getPrice();
 	
 	cout << "Checkout\n";
-	cout << "Your total is: " << total;
+	cout << "Your total is: " << total << endl ;
 	cout << "<0> Purchase\n"
 		 << "<1> Back\n- ";
 		
@@ -79,27 +96,3 @@ double cartType::getTotal()
 	return total;
 }
 
-//input error checking function
-int IntInput(string inMsg,    //menu prompt
-	const int MIN, //minimum value allowed
-	const int MAX) //maximum value allowed
-{
-	int  integer; //input by user to be checked
-	bool valid;   //LCV for validated input
-	do
-	{
-		valid = true;
-		cout << inMsg;
-		cin  >> integer;
-		cin.ignore(10000, '\n');
-
-		if (cin.fail() || integer < MIN || integer > MAX)
-		{
-			cin.clear();
-			cin.ignore(10000, '\n');
-			valid = false;
-			cout << "Invalid input, please try " << MIN << '-' << MAX << endl;
-		}
-	} while (!valid);
-	return integer;
-}
