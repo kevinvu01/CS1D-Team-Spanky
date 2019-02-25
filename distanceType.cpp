@@ -51,13 +51,26 @@ distanceType::distanceType()
 	distToSC       = 0;
 }
 
-distanceType::distanceType(const orderedLinkedList &other, int num, double d)
+distanceType::distanceType(const orderedLinkedList<distPair> &other, int num, double d)
 			:distanceList(other)
 {
 	numRestaurants = num;
 	distToSC       = d;
 }
 	
+distanceType::distanceType(const distanceType& other)
+			: distanceList(other.distanceList)
+{
+	numRestaurants = other.numRestaurants;
+	distToSC = other.distToSC;
+	//distanceList = other.distanceList;
+}
+
+distanceType::~distanceType()
+{
+	distanceList.destroyList();
+}
+
 const distanceType& distanceType::operator=(const distanceType& other)
 {
 	numRestaurants = other.numRestaurants;

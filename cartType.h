@@ -28,13 +28,11 @@ public:
   
   void selectionMenu();
   void checkout();
-  void updateRevenue();
+  
 private:
+  void updateRevenue();
   double total;
 };
 
-int IntInput(string inMsg,    //menu prompt
-	const int MIN, //minimum value allowed
-	const int MAX) //maximum value allowed
 
 #endif

@@ -1,23 +1,28 @@
 #include "restaurantType.h"
 
 restaurantType::restaurantType()
-				:cart()
-				:map() 
-				:menu()
+			:cart(),
+			 map(), 
+			 menu()
 {
 	name          = "Empty";
 	revenue       = 0;
 	restaurantNum = 0;
 }
 
-restaurantType::restaurantType(const list<menuItemType> & ml, const distanceType& dm, const cartType& c, int restCode, string n, double rev)
-				:cart(c)
-				:map(dm) 
-				:menu(ml)
+restaurantType::restaurantType(const vector<menuItemType> & ml, const distanceType& dm, const vector<menuItemType> &c, int restCode, string n, double rev)
+			:cart(c),
+			 map(dm), 
+			 menu(ml)
 {
 	name          = n;
 	revenue       = rev;
 	restaurantNum = restCode;
+}
+
+restaurantType::restaurantType(const restaurantType & other)
+{
+	copy(other);
 }
 
 restaurantType::~restaurantType()
@@ -25,7 +30,12 @@ restaurantType::~restaurantType()
 	menu.clear();
 } 
 
-const restaurantType& restaurantType::copy(const restaurantType&other)
+const restaurantType & restaurantType::operator=(const restaurantType &other)
+{
+	return copy(other);
+}
+
+restaurantType& restaurantType::copy(const restaurantType&other)
 {
 	restaurantType temp;
 	temp.name          = other.name;
@@ -39,33 +49,25 @@ const restaurantType& restaurantType::copy(const restaurantType&other)
 	return temp;
 }
 	
-void restaurantType::printMenu()
+void restaurantType::printMenu() 
 {
 	int i = 1;
 	
 	cout << name << endl
 		 << "Food Menu\n";
 		 
-	for(list<menuItemType>::iterator it = menu.begin(); it != menu.end())
+	for(int i = menu.size() - 1; i >= 0; i--)
 	{
-		cout << '<' << i << "> ";
-		it->print();
-		i++;
+		cout << '<' << i + 1 << "> ";
+		menu[i].print();
 	}
-}
-
-void restaurantType::printCart()
-{
-	cout << name << endl;
-	cart.printContents();
-	cout << setprecision(2) << fixed 
-		 << "Total: $" << cart.getTotal() << endl;
 }
 
 void restaurantType::updateInfo()
 {
-	int choice = 0;
-	int choice2 = 0;	
+	int    choice    = 0;
+	int    choice2   = 0;	
+	string tempName  = "";
 	double tempPrice = 0;
 	
 	do{
@@ -84,8 +86,8 @@ void restaurantType::updateInfo()
 					getline(cin, name);
 					break;
 			case 2: do{
-						cout << "<0> Done\n";
 						printMenu();
+						cout << "<0> Done\n";
 						
 						choice2   = IntInput("Choose which menu item to alter the price of: ", 0, menu.size());
 						tempPrice = DoubleInput("New Price: ", 0, 10000);
@@ -94,16 +96,26 @@ void restaurantType::updateInfo()
 					}while(choice2 != 0);
 					break;
 			case 3: do{
-						cout << "<0> Done\n"; 
 						printMenu();
+						cout << "<0> Done\n";
 						
 						choice2 = IntInput("Choose which menu item to wish to exterminate: ", 0, menu.size());
-												
-						menu[choice2 - 1].erase();
-						cout << "Erased.\n";
+						
+						vector<menuItemType>::iterator it = menu.begin();
+						while(!(*it == menu[choice2 - 1]))
+							++it;
+						
+						if(!(it == menu.end()))
+						{
+							menu.erase(it);
+							cout << "Erased.\n";
+						}
+						else
+							cout << "ERROR DELETING\n";
+						
 					}while(choice2 != 0);
 					break;
-			case 4: string tempName = "";
+			case 4: tempName = "n/a";
 					choice = 0;
 					cout << "Enter name of the menu item: ";
 					getline(cin, tempName);
@@ -120,32 +132,29 @@ void restaurantType::updateInfo()
 						cout << "Saved.\n";
 					}
 					break;
-			default: break;
+			default: tempName = "n/a";
+					break;
 		}; //end switch 
 	}while(choice != 0);
 }
 
-void restaurantType::updateRenevue()
-{
-	renenue += cart.getTotal();
-}
 
-void restaurantType::setName(string n)
+void restaurantType::setName(string n) 
 {
 	name = n;
 }
 
-double restaurantType::getRenevue()
+double restaurantType::getRevenue() const
 {
 	return revenue;
 }
 
-string restaurantType::getName()
+string restaurantType::getName() const
 {
 	return name;
 }
 
-double restaurantType::getDistToSC()
+double restaurantType::getDistToSC() 
 {
 	return map.getDistToSC();
 }
