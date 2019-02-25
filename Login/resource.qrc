@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/new/resource">
+        <file>75441256-desktop-pc-login-screen.jpg</file>
+    </qresource>
+</RCC>
