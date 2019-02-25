@@ -14,9 +14,13 @@ public:
   menuItemType(const menuItemType &);
   
   const menuItemType& operator=(const menuItemType& other);
-  
+  bool operator==(const menuItemType& other);
+  bool operator!=(const menuItemType& other);
+
   void changePrice(double);
   void print();
+  
+  double getPrice();
 private:
   string name;
   double price;
