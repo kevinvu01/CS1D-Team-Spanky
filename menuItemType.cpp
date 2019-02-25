@@ -2,18 +2,18 @@
 	
 menuItemType::menuItemType()
 {
-	name = "";
+	name  = "";
 	price = 0;
 }
 menuItemType::menuItemType(string n, double p)
 {
-	name = n;
+	name  = n;
 	price = p;
 }
 
 menuItemType::menuItemType(const menuItemType & other)
 {
-	name = other.name;
+	name  = other.name;
 	price = other.price;
 }
  
@@ -21,18 +21,43 @@ const menuItemType& menuItemType::operator=(const menuItemType& other)
 {
 	if(this != &other)
 	{
-		name = other.name;
+		name  = other.name;
 		price = other.price;
 	}
 	
 	return *this;
 }
 
+bool menuItemType::operator==(const menuItemType& other)
+{
+	bool equal = false;
+	
+	if(name == other.name)
+		equal = true;
+	
+	return equal;
+}
+
+bool menuItemType::operator!=(const menuItemType& other)
+{
+	bool unequal = false;
+	
+	if(name != other.name)
+		unequal = true;
+	
+	return unequal;
+}
+
+double menuItemType::getPrice()
+{
+	return price;
+}
+
 void menuItemType::print()
 {
 	const short COL = 20;
 	
-	cout << setprecision(2) << fixed;
+	cout << setprecision(2)   << fixed;
 	cout << left << setw(COL) << name << "$" << price << endl;
 	cout.unsetf(ios::fixed);
 }
