@@ -56,6 +56,9 @@ public:
 	//returns the total distance
 	void printTotalDist();
 	
+	//stub save 
+	void save();
+	
 	//public static (global variable for all dstanceTypes) to keep running total for trip distance
 	static double totalDist;
 private:
