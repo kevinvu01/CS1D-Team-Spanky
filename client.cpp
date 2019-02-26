@@ -3,10 +3,17 @@
 
 using namespace std;
 
+struct Interval { 
+    int start, end; 
+}; 
+
+bool compareInterval(Interval i1, Interval i2) ;
+
 //Sub Menus of Main
 void viewData();
 void planTrip();
 void adminEdit();
+void foundShortest();
 
 //Error Checks
 int IntInput(string inMsg,    //menu prompt
@@ -340,4 +347,25 @@ char YNCharInput(string inMsg) //input message
 		}
 	} while (!valid);
 	return character;
+}
+
+bool compareInterval(Interval i1, Interval i2) 
+{ 
+    return (i1.end < i2.end); 
+} 
+  
+void foundShortest(double mindis){
+     cout<<"Here I provide the shortest distance from the saddleback"<<endl;
+     vector<Interval> distances {};// enter the data int to a vector
+     distances.push_back(d1);
+     sizes = distances.size();
+     sort(distances.begin(),distances.end(), compareInterval); 
+	
+for (int i=0; i < sizes; i++){	
+  while(!distances.empty()){
+	 mindis =  distances[1].begin();
+	 distances[i].erase(distances[i].begin());	
+
+    }
+       cout<< "The next cloest distance is"<< mindis << endl;
 }
