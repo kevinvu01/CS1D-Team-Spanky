@@ -9,11 +9,12 @@
 #include "orderedLinkedList.h"
 
 using namespace std;
-
+class cartType;
+class restaurantType;
 //each pair is the distance in miles to another restaurant and the restaurant's number/code
 struct distPair
 {
-	int code;
+	int    code;
 	double value;
 	
 	//default constructor
@@ -28,6 +29,13 @@ struct distPair
 
 class distanceType
 {
+	//overloaded file stream insertion operator used for saving to the data file upon program termination
+	//Postcondition: prints out the restaurant data in same format is was uploaded
+	friend ofstream& operator<<(ofstream&, cartType&); 
+	//overloaded file stream extraction operator used for reading from the data file upon program execution
+	//Postcondition: reads in the restaurant data in format given in the project file from canvas
+	friend ifstream& operator>>(ifstream&, cartType&); 
+
 public:  
 	//default constructor
 	distanceType();
@@ -55,10 +63,7 @@ public:
 	
 	//returns the total distance
 	void printTotalDist();
-	
-	//stub save 
-	void save();
-	
+		
 	//public static (global variable for all dstanceTypes) to keep running total for trip distance
 	static double totalDist;
 private:
