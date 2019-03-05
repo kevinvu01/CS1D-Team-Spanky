@@ -5,22 +5,21 @@
 
 #include "distanceType.h"
 #include "menuItemType.h"
-//#include "cartType.h"
 #include <vector>
 #include <list>
 #include <iostream>
 #include <string>
 
 using namespace std;
-
+class cartType;
 class restaurantType{
 	//overloaded file stream insertion operator used for saving to the data file upon program termination
 	//Postcondition: prints out the restaurant data in same format is was uploaded
-	friend ofstream& operator<<(ofstream&, const restaurantType&); 
+	friend ofstream& operator<<(ofstream&, cartType&); 
 	
 	//overloaded file stream extraction operator used for reading from the data file upon program execution
 	//Postcondition: reads in the restaurant data in format given in the project file from canvas
-	friend ifstream& operator>>(ifstream&, restaurantType&); 
+	friend ifstream& operator>>(ifstream&, cartType&); 
 	
 	//friend void oheckout();
 	
@@ -38,7 +37,7 @@ public:
   ~restaurantType();
   
   //overloaded assignment operator
-  const restaurantType & operator=(const restaurantType &);
+  const restaurantType& operator=(const restaurantType &);
     
   //printMenu - prints the items of the menu with numbers
   //Postcondition - outputs to screen the menu with heading
@@ -62,8 +61,6 @@ public:
   //				the name of the restaurant, the price of menu item,
   //				add a menu item to the LL, and/or delete a menu item
   void updateInfo();
-  
-  
 protected:
   vector <menuItemType> menu; //vector of menu items
   vector <menuItemType> cart; //vector that contains menuItems 
@@ -74,7 +71,10 @@ protected:
   double       revenue;		  //total renevue of the restaurant
   
   //deep copy function
-  restaurantType& copy(const restaurantType &other);
+  restaurantType& copy(const restaurantType &other);  
+  
+  //helper to clean the vector menu of empty nodes
+  void cleanMenus();
 };
 
 //optional manual add function  
