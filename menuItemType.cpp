@@ -4,17 +4,20 @@ menuItemType::menuItemType()
 {
 	name  = "";
 	price = 0;
+	qty	  = 0;
 }
-menuItemType::menuItemType(string n, double p)
+menuItemType::menuItemType(string n, double p, int q)
 {
 	name  = n;
 	price = p;
+	qty   = q;
 }
 
 menuItemType::menuItemType(const menuItemType & other)
 {
 	name  = other.name;
 	price = other.price;
+	qty	  = other.qty;
 }
  
 const menuItemType& menuItemType::operator=(const menuItemType& other)
@@ -23,6 +26,7 @@ const menuItemType& menuItemType::operator=(const menuItemType& other)
 	{
 		name  = other.name;
 		price = other.price;
+		qty	  = other.qty;
 	}
 	
 	return *this;
@@ -51,6 +55,16 @@ bool menuItemType::operator!=(const menuItemType& other)
 double menuItemType::getPrice()
 {
 	return price;
+}
+
+int menuItemType::getQty()
+{
+	return qty;
+}
+
+string menuItemType::getName()
+{
+	return name;
 }
 
 void menuItemType::print()
