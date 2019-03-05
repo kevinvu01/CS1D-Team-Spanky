@@ -94,13 +94,4 @@ void distanceType::printTotalDist()
 	cout << "Total Distance: " << totalDist << endl;
 }
 
-void distanceType::save()
-{
-	ofstream fout;
-	fout.open("data.txt\0");
-	
-	//fout << stuff
-	
-	fout.close();
-}
 
