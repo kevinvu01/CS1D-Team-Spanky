@@ -5,10 +5,16 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
+#include <queue>
 #include <fstream>
 #include "orderedLinkedList.h"
+//#include "cartType.h"
 
 using namespace std;
+
+//forward declarations
+const int NUM_RESTAURANTS = 20;
 class cartType;
 class restaurantType;
 //each pair is the distance in miles to another restaurant and the restaurant's number/code
@@ -19,6 +25,7 @@ struct distPair
 	
 	//default constructor
 	distPair();
+	distPair(int, double);
 	
 	//overloaded relational operators
 	bool operator>=(const distPair& other);
@@ -36,18 +43,20 @@ class distanceType
 	//Postcondition: reads in the restaurant data in format given in the project file from canvas
 	friend ifstream& operator>>(ifstream&, cartType&); 
 
+	friend void tripping(cartType &resty, vector <cartType *> &pool, queue <cartType *> trip, int n);
+
 public:  
 	//default constructor
 	distanceType();
 	
 	//manual constructor 
-	distanceType(const orderedLinkedList<distPair> &, int numberOfRestaurants, double distanceToSaddleback);
+	distanceType(distPair [], int numberOfRestaurants, double distanceToSaddleback);
 	
 	//copy constructor
 	distanceType(const distanceType&);
 	
 	//destructor
-	~distanceType();
+	//~distanceType();
 	
 	//overloaded assignment operator
 	const distanceType& operator=(const distanceType& other);
@@ -56,7 +65,7 @@ public:
 	bool operator>=(const distanceType& other);
 	bool operator!=(const distanceType& other);
 	bool operator==(const distanceType& other);
-	
+
 	//basic setter and getter
 	void   setDistToSC(double);
 	double getDistToSC();
@@ -67,9 +76,9 @@ public:
 	//public static (global variable for all dstanceTypes) to keep running total for trip distance
 	static double totalDist;
 private:
-	orderedLinkedList <distPair> distanceList; 
-	int numRestaurants;
-	double distToSC;
+	distPair distanceList[NUM_RESTAURANTS]; 
+	int      numRestaurants;
+	double   distToSC;
 };
 
 
