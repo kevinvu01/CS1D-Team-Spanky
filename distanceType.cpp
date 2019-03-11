@@ -1,10 +1,17 @@
 #include "distanceType.h"
 
+
 //DISTANCEPAIR CONSTRUCTOR and things
 distPair::distPair()
 {
-	code = 0;
+	code  = 0;
 	value = 0;
+}
+
+distPair::distPair(int c, double v)
+{
+	code  = c;
+	value = v;
 }
 
 bool distPair::operator>=(const distPair& other)
@@ -45,37 +52,41 @@ double distanceType::totalDist = 0;
 
 
 distanceType::distanceType()
-			:distanceList()
+			 :distanceList()
 {
+	//distanceList   = {{0, 0}};
 	numRestaurants = 12;
 	distToSC       = 0;
 }
 
-distanceType::distanceType(const orderedLinkedList<distPair> &other, int num, double d)
-			:distanceList(other)
+distanceType::distanceType(distPair other[], int num, double d)
 {
+	for(int i = 0; i < NUM_RESTAURANTS; i++)
+		distanceList[i]   = other[i];
 	numRestaurants = num;
 	distToSC       = d;
 }
 	
 distanceType::distanceType(const distanceType& other)
-			: distanceList(other.distanceList)
 {
+	for(int i = 0; i < NUM_RESTAURANTS; i++)
+		distanceList[i]   = other.distanceList[i];
 	numRestaurants = other.numRestaurants;
-	distToSC = other.distToSC;
-	//distanceList = other.distanceList;
+	distToSC       = other.distToSC;
 }
 
+/*
 distanceType::~distanceType()
 {
 	distanceList.destroyList();
 }
-
+*/
 const distanceType& distanceType::operator=(const distanceType& other)
 {
 	numRestaurants = other.numRestaurants;
 	distToSC       = other.distToSC;
-	distanceList   = other.distanceList;
+	for(int i = 0; i < NUM_RESTAURANTS; i++)
+		distanceList[i]   = other.distanceList[i];
 }
 
 	
