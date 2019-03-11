@@ -1,6 +1,7 @@
 #include "restaurantType.h"
 #include "cartType.h"
 
+
 restaurantType::restaurantType()
 			:cart(),
 			 map(), 
@@ -62,7 +63,7 @@ void restaurantType::printMenu()
 	cout << name << endl
 		 << "Food Menu\n";
 		 
-	for(int i = menu.size() - 1; i >= 0; i--)
+	for(int i = 0; i < menu.size(); i++)
 	{
 		cout << '<' << i + 1 << "> ";
 		menu[i].print();
@@ -162,6 +163,11 @@ string restaurantType::getName() const
 	return name;
 }
 
+int restaurantType::getCode() const
+{
+	return restaurantNum;
+}
+
 double restaurantType::getDistToSC() 
 {
 	return map.getDistToSC();
@@ -182,10 +188,34 @@ void restaurantType::cleanMenus()
 	menu.shrink_to_fit();
 }
 
+void tripping(cartType &resty, vector<cartType *> &pool, queue <cartType *> trip, int n)
+{
+	cartType *temp = new cartType;
+	*temp = resty;
+	trip.push(temp);	
+
+	if(n == 0)
+	{
+		//delete temp;
+		return;
+	}
+	
+	distPair  lowest = resty.map.distanceList[0];
+	
+	int i;
+	for(i = 1; i < pool.size(); i++)
+	{
+		if(resty.map.distanceList[i].value < lowest.value && resty.map.distanceList[i].value != 0)
+			lowest = resty.map.distanceList[i];
+	}
+	
+	pool.erase(pool.begin() + (lowest.code - 1));
+	tripping(*pool[lowest.code], pool, trip, (n - 1));
+	//delete temp;
+}
+
 ofstream& operator<<(ofstream& os, cartType& resty)
 {
-	linkedListIterator <distPair> it;
-	it = resty.map.distanceList.begin();
 	resty.cleanMenus();
 	distPair *temp;
 	
@@ -195,8 +225,7 @@ ofstream& operator<<(ofstream& os, cartType& resty)
 	
 	for(int i = 1; i <= resty.map.numRestaurants; i++)
 	{
-		os << i << ' ' << (*it).value << endl;
-		++it;
+		os << resty.map.distanceList[i].code << ' ' << resty.map.distanceList[i].value << endl;
 	}
 	
 	os << resty.map.distToSC << " miles to Saddleback College " << endl;
@@ -208,58 +237,51 @@ ofstream& operator<<(ofstream& os, cartType& resty)
 		os << resty.menu[i].price << endl;
 	}
 	
-	os << endl << endl;
+	os << endl;
 	
 	return os;
 }
 
 ifstream& operator>>(ifstream& is, cartType& resty)
 {
-	is.open("CS1D Spring 2019 New Fast Food Project.txt\0");
+	
 
 	distPair tempP;
 	menuItemType tempM;
 	int tempI = 0;
 	string tempS;
 	double tempD = 0;
+	int hash = 0;
 	
 	if(!is.eof())
 	{
 		is.ignore(100, ':');
 		getline(is, tempS);
+		if(tempS.find_first_of(' ') == 0)
+			tempS = tempS.substr(1, tempS.length());
 		resty.name = tempS;
-		cout << resty.name << endl;
-		//is.ignore(100, '\n');
 		is.ignore(100, 'b');
 		is.ignore(100, ' ');
 		is >> tempI;
 		resty.restaurantNum = tempI;
-		cout << resty.restaurantNum << endl;
 		
 		is.ignore(100, '\n');
 		is.ignore(100, '-');
 		is >> tempI;
 		resty.map.numRestaurants = tempI;
-		cout << resty.map.numRestaurants << endl;
 		is.ignore(100, '\n');
 		
 		
-		linkedListIterator <distPair> it = resty.map.distanceList.begin();
+		//linkedListIterator <distPair> it = resty.map.distanceList.begin();
 		
 		for(int i = 0; i < resty.map.numRestaurants; i++)
 		{
-			//is >> tempI >> tempD;
-			
 			is >> tempP.code >> tempP.value; 
-			resty.map.distanceList.insert(tempP);
-			cout << tempP.code  << endl;
-			cout << tempP.value << endl;
+			resty.map.distanceList[tempP.code] = tempP;
 		}
 		is.ignore(100, '\n');
 		is >> tempD;
 		resty.map.distToSC = tempD;
-		cout << resty.map.distToSC << endl;
-		//is.ignore(100, '\n');
 		is.ignore(100, '\n');
 		
 		is >> tempI;
@@ -273,9 +295,10 @@ ifstream& operator>>(ifstream& is, cartType& resty)
 			resty.menu.push_back(tempM);
 		}
 		is.ignore(100, '\n');
-		is.ignore(100, '\n');
+		//is.ignore(100, '\n');
 	}
-	is.close();
+	
+	//delete tempP;
 	return is;
 }
 
