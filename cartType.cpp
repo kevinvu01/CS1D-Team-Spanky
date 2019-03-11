@@ -14,12 +14,24 @@ cartType::cartType(vector <menuItemType> c, const distanceType& d, const vector<
 
 const cartType& cartType::operator=(const cartType& other)
 {
+	menu = other.menu;
+	cart = other.cart;
+	map  = other.map;
+	name = other.name;
+	restaurantNum = other.restaurantNum;
+	revenue = other.revenue;
 	total = other.total;
-	cart  = other.cart;
 	
 	return *this;
 }
 
+cartType::cartType(const cartType& other)
+		: restaurantType(other)
+{
+	total = other.total;
+}
+	
+	
 void cartType::updateRevenue()
 {
 	revenue += total;
@@ -60,10 +72,8 @@ void cartType::selectionMenu()
 
 			cart.erase(it);
 		}
-		else if(choice == cart.size())
+		if(choice == cart.size())
 			checkout();
-		else 
-			return;
 	}while(choice != 0);
 }
 
@@ -76,28 +86,31 @@ void cartType::addToCart()
 	
 	do{
 		printMenu();
-		cout << "<" << menu.size() << "> View Cart\n";
+		cout << "<" << menu.size() + 1 << "> View Cart\n";
+		cout << "<" << menu.size() + 2 << "> Delete Items in Cart\n";
+
 		cout << "<0> Back\n";
 
-		choice = IntInput("Chooce which item to add to your cart: ", 0, menu.size());
+		choice = IntInput("Chooce which item to add to your cart: ", 0, menu.size() + 2);
 		
 		if(choice < menu.size() && choice != 0)
 			qty = IntInput("Enter quantity: ", 1, 100);
 		
-		if(choice > 0 && choice != menu.size())
-		{
-			it = menu.begin();
-			while(!(*it == menu[choice - 1]) || it != menu.end())
-				++it;
-			
-			temp = *it;
-			
-			cart.push_back(*it);
+		if(choice > 0 && choice != menu.size() + 1)
+		{			
+			cart.push_back(menu[choice - 1]);
 		}
-		else if(choice == menu.size())
-			selectionMenu();
-		else 
-			return;
+		if(choice == menu.size() + 1)
+			checkout();
+		if(choice == menu.size() + 2)
+		{
+			choice = IntInput("Choose which item to delete: ", 1, menu.size());
+			it = cart.begin();
+			while(!(*it == menu[choice - 1]) && it != cart.end())
+				++it;
+
+			cart.erase(it);
+		}
 	}while(choice != 0);
 }
 
@@ -105,10 +118,11 @@ void cartType::checkout()
 {
 	int choice = 0;
 	
-	for(vector<menuItemType>::iterator it = cart.begin(); it != cart.end(); ++it)
-		total += it->getPrice() * it->getQty();
+	for(int i = 0; i < cart.size(); i++)
+		total += cart[i].getPrice() * cart[i].getQty();
 	
 	cout << "Checkout\n";
+	printCart();
 	cout << "Your total is: " << total << endl ;
 	cout << "<0> Purchase\n"
 		 << "<1> Back\n- ";
