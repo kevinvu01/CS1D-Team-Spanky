@@ -16,6 +16,7 @@ void executeTrip(queue <cartType *> &);
 void adminEdit(vector <cartType *> &);
 
 void addRestaurant(vector <cartType *> &);
+// void foundShortest();
 
 //Error Checks
 int IntInput(string inMsg,    //menu prompt
@@ -48,6 +49,7 @@ int main()
 		cout<<"<2>	Plan a Trip"<<endl;
 		cout<<"<3>	Edit Restaurants and Menus"<<endl;
 		cout<<"<0>	Quit"<<endl;
+		
 		
 		choice = IntInput("Enter choice: ", 0, 3);
 		
@@ -245,11 +247,13 @@ void viewData(vector<cartType *> &pool)
 
 void planTrip(vector <cartType *> &allR)
 {
-	vector <cartType *> tripPool(allR);
+	vector <cartType *> tripPool;
 	queue  <cartType *> trip;
 
 	int choice = 0;
+	int choice2 = 0;
 	int num	   = 0;
+	int c      = 0;
 	bool exist = false;
 	cartType * shortest = new cartType;
 	
@@ -271,6 +275,7 @@ void planTrip(vector <cartType *> &allR)
 		{
 			case 1:
 				{
+					tripPool = allR;
 					cout << "Trip to initial 10 restaurants starting at Saddleback" << endl;
 					*shortest = *tripPool[0];
 					for(int i = 1; i < tripPool.size(); i++)
@@ -278,35 +283,53 @@ void planTrip(vector <cartType *> &allR)
 						if(shortest->getDistToSC() > tripPool[i]->getDistToSC() && tripPool[i]->getName() != "Empty")
 							*shortest = *tripPool[i];
 					}
-					//cout << shortest->getName() << endl;
-					tripping(*shortest, tripPool, trip, 10);
+					tripping(*shortest, tripPool, trip, 9);
 					executeTrip(trip);
 					cout << "The total distance for the trip was: " << distanceType::totalDist << endl;
 					break;
 				}
 			case 2:
 				{
+					tripPool = allR;
 					cout << "Trip starting at Dominos" << endl;
 					num = IntInput("Enter the number of restaurants to visit: ", 1, tripPool.size());
-					
 						*shortest = *tripPool[2];
-						tripping(*shortest, tripPool, trip, num);
+						tripping(*shortest, tripPool, trip, num - 1);
+						
 						executeTrip(trip);
+						//out<<"flag 2"<<endl;
 					break;
 				}
 			case 3:
 				{
+					cout << "Custom trip. Enter " << allR.size() << " to commence trip." << endl;
+					do{
+						for(c = 0; c < allR.size(); c++)
+							cout << '<' << c << "> " << allR[c]->getName() << endl;
+						choice2 = IntInput("Choose your restaurants:", 0, allR.size());
+				
+						if(choice2 < allR.size())
+							tripPool.push_back(allR[c]);
+						
+					}while(choice2 != allR.size());
 					
-					cout << "Custom trip function"    << endl;
-					
+					shortest = tripPool[0];
+					for(int i = 1; i < tripPool.size(); i++)
+					{
+						
+						if(shortest->getDistToSC() > tripPool[i]->getDistToSC() && tripPool[i]->getName() != "Empty")
+							shortest = tripPool[i];
+					}
+
+					tripping(*shortest, tripPool, trip, tripPool.size() - 1);
+					executeTrip(trip);
+					cout << "The total distance for the trip was: " << distanceType::totalDist << endl;
 					break;
 				}
 			case 0:	 break;
 			default: cout << "error";
 		}
 	}while(choice != 0);
-	
-	//delete shortest;
 }
 
 void executeTrip(queue <cartType *> &trip)
@@ -317,7 +340,8 @@ void executeTrip(queue <cartType *> &trip)
 		trip.pop();
 		
 		temp->addToCart();
-	}while(!trip.empty());
+		cout << temp->getName();
+	}while(!(trip.empty()));
 }
 
 void adminEdit(vector <cartType *> &pool)
