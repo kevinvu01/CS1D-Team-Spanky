@@ -65,7 +65,7 @@ void restaurantType::printMenu()
 		 
 	for(int i = 0; i < menu.size(); i++)
 	{
-		cout << '<' << i + 1 << "> ";
+		cout << '<' << i << "> ";
 		menu[i].print();
 	}
 }
@@ -188,30 +188,28 @@ void restaurantType::cleanMenus()
 	menu.shrink_to_fit();
 }
 
-void tripping(cartType &resty, vector<cartType *> &pool, queue <cartType *> trip, int n)
+void tripping(cartType &resty, vector<cartType *> &pool, queue <cartType *> &trip, int n)
 {
 	cartType *temp = new cartType;
+	
 	*temp = resty;
-	trip.push(temp);	
+	cout << temp->getName() << endl << endl;
+	trip.push(temp);
 
 	if(n == 0)
-	{
-		//delete temp;
 		return;
-	}
-	
-	distPair  lowest = resty.map.distanceList[0];
+
+	distPair lowest = resty.map.distanceList[0];
 	
 	int i;
 	for(i = 1; i < pool.size(); i++)
 	{
-		if(resty.map.distanceList[i].value < lowest.value && resty.map.distanceList[i].value != 0)
+		if(resty.map.distanceList[i].value < lowest.value && resty.map.distanceList[i].value != 0 && resty.map.distanceList[i].value )
 			lowest = resty.map.distanceList[i];
 	}
 	
 	pool.erase(pool.begin() + (lowest.code - 1));
 	tripping(*pool[lowest.code], pool, trip, (n - 1));
-	//delete temp;
 }
 
 ofstream& operator<<(ofstream& os, cartType& resty)
