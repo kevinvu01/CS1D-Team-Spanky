@@ -43,7 +43,7 @@ class distanceType
 	//Postcondition: reads in the restaurant data in format given in the project file from canvas
 	friend ifstream& operator>>(ifstream&, cartType&); 
 
-	friend void tripping(cartType &resty, vector <cartType *> &pool, queue <cartType *> trip, int n);
+	friend void tripping(cartType &resty, vector<cartType *> &pool, queue <cartType *> &trip, int n);
 
 public:  
 	//default constructor
