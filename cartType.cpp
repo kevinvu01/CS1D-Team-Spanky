@@ -6,8 +6,8 @@ cartType::cartType()
 	total = 0;
 }
 
-cartType::cartType(vector <menuItemType> c, const distanceType& d, const vector<menuItemType> & m, int restCode, string name, double rev, double tot)
-		: restaurantType(c, d, m, restCode, name, rev)
+cartType::cartType(vector <menuItemType> m, const distanceType& d, const vector<menuItemType> & c, int restCode, string name, double rev, double tot)
+		: restaurantType(m, d, c, restCode, name, rev)
 {
 	total = tot;
 }
@@ -52,33 +52,6 @@ void cartType::printCart()
 		 << "Subtotal: $"   << total << endl;
 }
 
-/*
-void cartType::selectionMenu()
-{
-	int choice = 0;
-	vector<menuItemType>::iterator it = cart.begin();
-	
-	do{
-		printCart();
-		cout << "<" << cart.size() << "> Checkout\n";
-		cout << "<0> Back\n";
-		
-		choice = IntInput("Choose which to delete: ", 0, cart.size());
-		
-		if(choice > 0 && choice != cart.size())
-		{
-			it = cart.begin();
-			while(!(*it == menu[choice - 1]))
-				++it;
-
-			cart.erase(it);
-		}
-		if(choice == cart.size())
-			checkout();
-	}while(choice != 0);
-}
-*/
-
 void cartType::addToCart()
 {
 	int choice = 0;
@@ -111,24 +84,15 @@ void cartType::addToCart()
 	cout << "DONE" << getName() << endl;
 }
 
-/*		if(choice == menu.size() + 2)
-		{
-			choice = IntInput("Choose which item to delete: ", 1, menu.size());
-			it = cart.begin();
-			while(!(*it == menu[choice - 1]) && it != cart.end())
-				++it;
-
-			cart.erase(it);
-		}
-*/
-
 void cartType::checkout()
 {
 	int choice = 0;
 	
 	cout << "Checkout\n";
 	printCart();
-	cout << "Your total is: " << total << endl ;
+	total += total * .06;
+	cout << setprecision(2) << fixed;
+	cout << "Your total is: $" << total << endl ;
 	cout << "<0> Purchase\n"
 		 << "<1> Discard\n";
 		
@@ -137,13 +101,13 @@ void cartType::checkout()
 	{
 		updateRevenue();
 		total = 0;
+		cart.erase(cart.begin(), cart.end());
 		cout << "Your order has been placed.\n";
 	}
 	else 
 	{
-		for(int i = 0; i < cart.size(); i++)
-			cart.erase(cart.begin());
-		
+		cart.erase(cart.begin(), cart.end());
+		total = 0;
 		cout << "Discarded.\n";
 	}
 }
