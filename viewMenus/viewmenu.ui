@@ -123,5 +123,22 @@
   </widget>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>Wendys</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>open()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>210</x>
+     <y>317</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>195</x>
+     <y>404</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

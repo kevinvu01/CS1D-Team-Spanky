@@ -106,6 +106,7 @@ public:
         pushButton->setGeometry(QRect(490, 490, 93, 28));
 
         retranslateUi(Dialog);
+        QObject::connect(Wendys, SIGNAL(clicked()), Dialog, SLOT(open()));
 
         QMetaObject::connectSlotsByName(Dialog);
     } // setupUi
