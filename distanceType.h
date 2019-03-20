@@ -17,6 +17,7 @@ using namespace std;
 const int NUM_RESTAURANTS = 20;
 class cartType;
 class restaurantType;
+
 //each pair is the distance in miles to another restaurant and the restaurant's number/code
 struct distPair
 {
@@ -43,7 +44,7 @@ class distanceType
 	//Postcondition: reads in the restaurant data in format given in the project file from canvas
 	friend ifstream& operator>>(ifstream&, cartType&); 
 
-	friend void tripping(cartType &resty, vector <cartType *> &pool, queue <cartType *> trip, int n);
+	friend void tripping(cartType &resty, vector<cartType *> &pool, queue <cartType *> &trip, int n);
 
 public:  
 	//default constructor
@@ -72,6 +73,9 @@ public:
 	
 	//returns the total distance
 	void printTotalDist();
+	
+	//appends to the end of the distanceList the distance to a new restaurant at next index. Increments numRestaurants
+	void appendDist(double);
 		
 	//public static (global variable for all dstanceTypes) to keep running total for trip distance
 	static double totalDist;

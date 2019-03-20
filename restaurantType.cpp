@@ -65,7 +65,7 @@ void restaurantType::printMenu()
 		 
 	for(int i = 0; i < menu.size(); i++)
 	{
-		cout << '<' << i + 1 << "> ";
+		cout << '<' << i << "> ";
 		menu[i].print();
 	}
 }
@@ -94,7 +94,7 @@ void restaurantType::updateInfo()
 					break;
 			case 2: do{
 						printMenu();
-						cout << "<0> Done\n";
+						cout << "<" << menu.size() << "> Done\n";
 						
 						choice2   = IntInput("Choose which menu item to alter the price of: ", 0, menu.size());
 						tempPrice = DoubleInput("New Price: ", 0, 10000);
@@ -104,7 +104,7 @@ void restaurantType::updateInfo()
 					break;
 			case 3: do{
 						printMenu();
-						cout << "<0> Done\n";
+						cout << "<" << menu.size() << "> Done\n";
 						
 						choice2 = IntInput("Choose which menu item to wish to exterminate: ", 0, menu.size());
 						
@@ -122,7 +122,9 @@ void restaurantType::updateInfo()
 						
 					}while(choice2 != 0);
 					break;
-			case 4: tempName = "n/a";
+			case 4: 
+					if(menu.size() < 8){
+					tempName = "n/a";
 					choice = 0;
 					cout << "Enter name of the menu item: ";
 					getline(cin, tempName);
@@ -139,12 +141,24 @@ void restaurantType::updateInfo()
 						cout << "Saved.\n";
 					}
 					break;
+					}
+					else
+					{
+						cout << "Menu is full.\n";
+						break;
+					}
 			default: tempName = "n/a";
 					break;
 		}; //end switch 
 		
 		cleanMenus();
 	}while(choice != 0);
+	
+}
+
+void restaurantType::appendNewDist(double d)
+{
+	map.appendDist(d);
 }
 
 
@@ -188,30 +202,26 @@ void restaurantType::cleanMenus()
 	menu.shrink_to_fit();
 }
 
-void tripping(cartType &resty, vector<cartType *> &pool, queue <cartType *> trip, int n)
+void tripping(cartType &resty, vector<cartType *> &pool, queue <cartType *> &trip, int n)
 {
 	cartType *temp = new cartType;
 	*temp = resty;
-	trip.push(temp);	
+	trip.push(temp);
 
 	if(n == 0)
-	{
-		//delete temp;
 		return;
-	}
-	
-	distPair  lowest = resty.map.distanceList[0];
+
+	distPair lowest = resty.map.distanceList[0];
 	
 	int i;
 	for(i = 1; i < pool.size(); i++)
 	{
-		if(resty.map.distanceList[i].value < lowest.value && resty.map.distanceList[i].value != 0)
+		if(resty.map.distanceList[i].value < lowest.value && resty.map.distanceList[i].value != 0 && resty.map.distanceList[i].value )
 			lowest = resty.map.distanceList[i];
 	}
-	
+	distanceType::totalDist += lowest.value;
 	pool.erase(pool.begin() + (lowest.code - 1));
 	tripping(*pool[lowest.code], pool, trip, (n - 1));
-	//delete temp;
 }
 
 ofstream& operator<<(ofstream& os, cartType& resty)
@@ -302,8 +312,3 @@ ifstream& operator>>(ifstream& is, cartType& resty)
 	return is;
 }
 
-//optional manual add
-void AddRestaurant()
-{
-	string tempName;
-}

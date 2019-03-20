@@ -38,6 +38,7 @@ public:
   //precondition: parameter (the new price) should be positive
   //postcondition: price is changed to the new price
   void changePrice(double);
+  void setQty(int);
   
   //print
   //postcondition: the menu item is printed to screen as its name followed by $ price 

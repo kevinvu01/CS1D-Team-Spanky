@@ -6,8 +6,8 @@ cartType::cartType()
 	total = 0;
 }
 
-cartType::cartType(vector <menuItemType> c, const distanceType& d, const vector<menuItemType> & m, int restCode, string name, double rev, double tot)
-		: restaurantType(c, d, m, restCode, name, rev)
+cartType::cartType(vector <menuItemType> m, const distanceType& d, const vector<menuItemType> & c, int restCode, string name, double rev, double tot)
+		: restaurantType(m, d, c, restCode, name, rev)
 {
 	total = tot;
 }
@@ -20,7 +20,7 @@ const cartType& cartType::operator=(const cartType& other)
 	name = other.name;
 	restaurantNum = other.restaurantNum;
 	revenue = other.revenue;
-	total = other.total;
+	total   = other.total;
 	
 	return *this;
 }
@@ -42,100 +42,74 @@ void cartType::printCart()
 	cout << name << endl;
 	cout << "Your cart:\n";
 	
-	for(int i = 1; i <= cart.size(); i++)
+	for(int i = 0; i < cart.size(); i++)
 	{
-		cout << "<" << i << "> ";
-		cart[i - 1].print();
+		cout << "Qty: " << cart[i].getQty() << " : ";
+		cart[i].print();
 	}
 
 	cout << setprecision(2) << fixed 
-		 << "Total: $" << total << endl;
-}
-
-void cartType::selectionMenu()
-{
-	int choice = 0;
-	vector<menuItemType>::iterator it = cart.begin();
-	
-	do{
-		printCart();
-		cout << "<" << cart.size() << "> Checkout\n";
-		cout << "<0> Back\n";
-		
-		choice = IntInput("Choose which to delete: ", 0, cart.size());
-		
-		if(choice > 0 && choice != cart.size())
-		{
-			it = cart.begin();
-			while(!(*it == menu[choice - 1]))
-				++it;
-
-			cart.erase(it);
-		}
-		if(choice == cart.size())
-			checkout();
-	}while(choice != 0);
+		 << "Subtotal: $"   << total << endl;
 }
 
 void cartType::addToCart()
 {
 	int choice = 0;
 	int qty    = 0;
-	menuItemType temp;
+	menuItemType *temp;
 	vector<menuItemType>::iterator it = menu.begin();
 	
 	do{
 		printMenu();
+		cout << "<" << menu.size() 	   << "> Checkout\n";
 		cout << "<" << menu.size() + 1 << "> View Cart\n";
-		cout << "<" << menu.size() + 2 << "> Delete Items in Cart\n";
+		cout << "<" << menu.size() + 2 << "> Next Restaurant\n";
 
-		cout << "<0> Back\n";
 
 		choice = IntInput("Chooce which item to add to your cart: ", 0, menu.size() + 2);
 		
-		if(choice < menu.size() && choice != 0)
-			qty = IntInput("Enter quantity: ", 1, 100);
-		
-		if(choice > 0 && choice != menu.size() + 1)
-		{			
-			cart.push_back(menu[choice - 1]);
-		}
-		if(choice == menu.size() + 1)
-			checkout();
-		if(choice == menu.size() + 2)
+		if(choice < menu.size())
 		{
-			choice = IntInput("Choose which item to delete: ", 1, menu.size());
-			it = cart.begin();
-			while(!(*it == menu[choice - 1]) && it != cart.end())
-				++it;
-
-			cart.erase(it);
+			qty  = IntInput("Enter quantity: ", 1, 100);
+			temp = new menuItemType(menu[choice].getName(), menu[choice].getPrice(), qty);
+			cart.push_back(*temp);
+			total += qty * menu[choice].getPrice();
 		}
-	}while(choice != 0);
+		
+		if(choice == menu.size())		
+			checkout();
+		if(choice == menu.size() + 1)
+			printCart();
+	}while(choice != menu.size() + 2);
+	cout << "DONE" << getName() << endl;
 }
 
 void cartType::checkout()
 {
 	int choice = 0;
 	
-	for(int i = 0; i < cart.size(); i++)
-		total += cart[i].getPrice() * cart[i].getQty();
-	
 	cout << "Checkout\n";
 	printCart();
-	cout << "Your total is: " << total << endl ;
+	total += total * .06;
+	cout << setprecision(2) << fixed;
+	cout << "Your total is: $" << total << endl ;
 	cout << "<0> Purchase\n"
-		 << "<1> Back\n- ";
+		 << "<1> Discard\n";
 		
-	choice = IntInput("", 0, 1);
+	choice = IntInput("Your choice: ", 0, 1);
 	if(choice == 0)
 	{
 		updateRevenue();
 		total = 0;
+		cart.erase(cart.begin(), cart.end());
 		cout << "Your order has been placed.\n";
 	}
 	else 
+	{
+		cart.erase(cart.begin(), cart.end());
+		total = 0;
 		cout << "Discarded.\n";
+	}
 }
 
 double cartType::getTotal()

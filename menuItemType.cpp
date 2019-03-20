@@ -81,6 +81,11 @@ void menuItemType::changePrice(double newPrice)
 	price = newPrice;
 }
 
+void menuItemType::setQty(int x)
+{
+	qty = x;
+}
+
 //input error checking function
 int IntInput(string inMsg,    //menu prompt
 	const int MIN, //minimum value allowed

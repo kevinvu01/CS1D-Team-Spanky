@@ -89,6 +89,12 @@ const distanceType& distanceType::operator=(const distanceType& other)
 		distanceList[i]   = other.distanceList[i];
 }
 
+void distanceType::appendDist(double d)
+{
+	distanceList[numRestaurants].code = numRestaurants + 1;
+	distanceList[numRestaurants].value = d;
+	numRestaurants++;
+}
 	
 double distanceType::getDistToSC()
 {

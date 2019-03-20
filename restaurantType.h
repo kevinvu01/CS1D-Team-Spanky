@@ -5,7 +5,6 @@
 
 #include "distanceType.h"
 #include "menuItemType.h"
-//#include "cartType.h"
 #include <vector>
 #include <queue>
 #include <list>
@@ -23,7 +22,7 @@ class restaurantType{
 	//Postcondition: reads in the restaurant data in format given in the project file from canvas
 	friend ifstream& operator>>(ifstream&, cartType&); 
 	
-	friend void tripping(cartType &resty, vector <cartType *> &pool, queue <cartType *> trip, int n);
+	friend void tripping(cartType &resty, vector<cartType *> &pool, queue <cartType *> &trip, int n);
 
 public: 
   //default constructor
@@ -57,10 +56,10 @@ public:
   
   //setName - sets the name ofthe restaurant to the parameter
   void setName(string);
+  
+  //appendNewDist - adds a distance to a new restaurant to the map and incrememnts the number of restaurants
+  void appendNewDist(double);
   	
-	// recursive function to p3.	Provide the capability to visit the initial 10 fast food restaurants starting at Saddleback
- // void tripping(cartType &resty, vector <cartType *> &pool, queue <cartType *> trip, int n);
-
   //updateInfo - provides the ability to select different aspects of the
   //			 restaurant and modify it
   //Postconditions: returns nothing but can modify through user input 
@@ -75,7 +74,6 @@ protected:
   int          restaurantNum; //the code for which restaurant it is(used for computing distances)
   string       name;		  //name of restaurant
   double       revenue;		  //total renevue of the restaurant
-  //int 		   dominosNum;
   
   //deep copy function
   restaurantType& copy(const restaurantType &other);  
@@ -84,6 +82,4 @@ protected:
   void cleanMenus();
 };
 
-//optional manual add function  
-void AddRestaurant();
 #endif

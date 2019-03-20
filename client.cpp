@@ -11,11 +11,12 @@ bool save(vector <cartType *> &);
 
 //Sub Menus of Main
 void viewData(vector <cartType *> &pool);
+void printRestaurants(vector <cartType *> &pool);
 void planTrip(vector <cartType *> &);
 void executeTrip(queue <cartType *> &);
 void adminEdit(vector <cartType *> &);
-
 void addRestaurant(vector <cartType *> &);
+// void foundShortest();
 
 //Error Checks
 int IntInput(string inMsg,    //menu prompt
@@ -48,6 +49,7 @@ int main()
 		cout<<"<2>	Plan a Trip"<<endl;
 		cout<<"<3>	Edit Restaurants and Menus"<<endl;
 		cout<<"<0>	Quit"<<endl;
+		
 		
 		choice = IntInput("Enter choice: ", 0, 3);
 		
@@ -102,55 +104,91 @@ int main()
 
 void addRestaurant(vector <cartType *> &pool)
 {
-	cartType *temp = new cartType;
-	double tempD;
-	string tempS, tempN;
-	int tempI,    tempRN;
-	distPair      tempP;
-	menuItemType *tempM;
-	vector       <menuItemType> menu;
-	distPair map[NUM_RESTAURANTS];
-
-
-	
-	cout << "Enter the name of the restaurant: ";
-	getline(cin, tempN);
-	
-	cout << "The restaurant number for " << tempN << " will be " << pool.size() + 1 << endl;
-	//pool.length will be as such
-	
-	cout << "Menu items for " << tempN << ": " << endl;
-	int j = IntInput("Enter the number of menu items: ", 1, 10);
-	
-	for(int i = 0; i < j; i++)
-	{
-		cout << "Enter name of menu item " << i << ": ";
-		getline(cin, tempS);
-		tempD = IntInput("Enter price: $", 0, 10000.00);
-		tempM = new menuItemType(tempS, tempD, 0);
-		menu.push_back(*tempM);
-	}
-	
-	for(int i = 0; i < 8; i++)
-	{
-		//tempP = new distPair;
-		cout << "Enter the restaurant number and distance to said restaurant\n    # ";
-		cin  >> tempP.code;
-		cout << "dist: ";
-		cin  >> tempP.value;
-		cin.ignore(1000, '\n');
+	if(pool.size() < NUM_RESTAURANTS){
 		
-		map[i] = (tempP);
-	}
-		
-	cout << "Enter distance to Saddleback: ";
-	cin  >> tempD;
-	cin.ignore(1000, '\n');
-	
-	distanceType tempDistType(map, 8, tempD);
-	vector<menuItemType> cart(4);
+	cout << "ADD RESTAURANT\n";
+	int choice = IntInput("<0> Manually\n<1> Via file\n->", 0, 1);
+	if(choice == 0){
+		double tempD;
+		string tempS, tempN;
+		int tempI,    tempRN;
+		distPair      tempP;
+		menuItemType *tempM;
+		vector       <menuItemType> menu;
+		distPair map[NUM_RESTAURANTS];
 
-	
+
+		
+		cout << "Enter the name of the restaurant: ";
+		getline(cin, tempN);
+		
+		cout << "The restaurant number for " << tempN << " will be " << pool.size() + 1 << endl;
+		
+		cout << "Menu items for " << tempN << ": " << endl;
+		int j = IntInput("Enter the number of menu items: ", 1, 10);
+		
+		for(int i = 0; i < j; i++)
+		{
+			cout << "Enter name of menu item " << i << ": ";
+			getline(cin, tempS);
+			tempD = IntInput("Enter price: $", 0, 10000.00);
+			tempM = new menuItemType(tempS, tempD, 0);
+			menu.push_back(*tempM);
+		}
+		
+		for(int i = 0; i < pool.size(); i++)
+		{
+			//tempP = new distPair;
+			cout << "Enter the distance in miles to restaurant #" << i + 1 << ": ";
+			tempP.value = DoubleInput("", .001, 1000);
+			pool[i]->appendNewDist(tempP.value);
+			map[i] = (tempP);
+		}
+		map[pool.size()].value = 0.0;
+			
+		tempD = DoubleInput("Enter distance to Saddleback: ", 0, 1000);
+		
+		distanceType tempDistType(map, 8, tempD);
+		vector<menuItemType> cart(4);
+
+		cartType *temp = new cartType(menu, tempDistType, cart, pool.size(), tempN, 0, 0);
+		pool.push_back(temp);
+	}
+	else
+	{
+		string temp;
+		bool success = false;
+		cartType *tempR;
+		ifstream oofda;
+		cout << "Enter the name of the file to upload: ";
+		getline(cin, temp);
+		
+		oofda.open(temp.c_str());
+		if(oofda.fail())
+			cout << "The file does not exist.\n";
+		else
+		{
+		while(!oofda.eof())
+		{
+			tempR = new cartType;
+			oofda >> *tempR;
+			pool.push_back(tempR);
+		}
+		if(!oofda.eof())
+			cout << "Error: more data to be loaded," << endl;
+		else if(pool.size() == 0)
+			cout << "Error: no data was loaded.\n";
+		else if(oofda.eof())
+			success = true;
+		else
+			cout << "Other error.\n";
+		
+		oofda.close();
+		}
+	}
+	}//end if there is room for more restaurants to add
+	else
+		cout << "Cannot add restaurant. Database is full.\n";
 }
 
 bool load(vector <cartType *> &pool)
@@ -160,7 +198,7 @@ bool load(vector <cartType *> &pool)
 	cartType *temp;
 	ifstream oofda;
 	oofda.open("CS1D Spring 2019 Fast Food Project.txt\0");
-	while(!oofda.eof())
+	while(!oofda.eof() && pool.size() < NUM_RESTAURANTS)
 	{
 		temp = new cartType;
 		oofda >> *temp;
@@ -178,26 +216,6 @@ bool load(vector <cartType *> &pool)
 	
 	oofda.close();
 
-/*
-	oofda.open("CS1D Spring 2019 New Fast Food Project.txt\0");
-	while(!oofda.eof())
-	{
-		temp = new cartType;
-		oofda >> *temp;
-		pool.push_back(temp);
-	}
-	
-	if(!oofda.eof())
-		cout << "Error: more data to be loaded," << endl;
-	else if(pool.size() == 0)
-		cout << "Error: no data was loaded.\n";
-	else if(oofda.eof())
-		success = true;
-	else
-		cout << "Other error.\n";
-	
-	oofda.close();
-	*/
 	return success;
 }
 
@@ -229,8 +247,7 @@ void viewData(vector<cartType *> &pool)
 		cout<<"Team Spanky: Foodie Extravaganza"<<endl;
 		cout<<"View Restaurants"<<endl<<endl;
 		
-		for(int i = pool.size() - 1; i >= 0; i--)
-			cout << '<' << i << "> " << pool[i]->getName() << endl;
+		printRestaurants(pool);
 		
 		cout << "<-1> Return\n";
 		choice = IntInput("Your choice: ", -1, pool.size() - 1);
@@ -243,15 +260,23 @@ void viewData(vector<cartType *> &pool)
 	}while (choice != -1);
 }
 
+void printRestaurants(vector <cartType *> &pool)
+{
+	for(int i = 0; i < pool.size(); i++)
+		cout << '<' << i << "> " << pool[i]->getName() << endl;
+}
+
 void planTrip(vector <cartType *> &allR)
 {
-	vector <cartType *> tripPool(allR);
+	vector <cartType *> tripPool;
 	queue  <cartType *> trip;
 
 	int choice = 0;
+	int choice2 = 0;
 	int num	   = 0;
+	int c      = 0;
 	bool exist = false;
-	cartType * shortest = new cartType;
+	cartType * shortest = new cartType;;
 	
 	do
 	{
@@ -271,42 +296,76 @@ void planTrip(vector <cartType *> &allR)
 		{
 			case 1:
 				{
+					tripPool = allR;
 					cout << "Trip to initial 10 restaurants starting at Saddleback" << endl;
 					*shortest = *tripPool[0];
 					for(int i = 1; i < tripPool.size(); i++)
 					{
 						if(shortest->getDistToSC() > tripPool[i]->getDistToSC() && tripPool[i]->getName() != "Empty")
+						{
+							c = i;
 							*shortest = *tripPool[i];
+						}
 					}
-					//cout << shortest->getName() << endl;
-					tripping(*shortest, tripPool, trip, 10);
+					
+					distanceType::totalDist += shortest->getDistToSC();
+					tripPool.erase(tripPool.begin() + c);
+					tripping(*shortest, tripPool, trip, 9);
 					executeTrip(trip);
 					cout << "The total distance for the trip was: " << distanceType::totalDist << endl;
 					break;
 				}
 			case 2:
 				{
+					tripPool = allR;
 					cout << "Trip starting at Dominos" << endl;
 					num = IntInput("Enter the number of restaurants to visit: ", 1, tripPool.size());
+					*shortest = *tripPool[2];
+				
+					distanceType::totalDist += shortest->getDistToSC();
+					tripping(*shortest, tripPool, trip, num - 1);
 					
-						*shortest = *tripPool[2];
-						tripping(*shortest, tripPool, trip, num);
-						executeTrip(trip);
+					executeTrip(trip);
+					cout << "The total distance for the trip was: " << distanceType::totalDist << endl;
 					break;
 				}
 			case 3:
 				{
+					cout << "Custom trip. Enter " << allR.size() << " to commence trip." << endl;
+					do{
+						for(c = 0; c < allR.size(); c++)
+							cout << '<' << c << "> " << allR[c]->getName() << endl;
+						choice2 = IntInput("Choose your restaurants:", 0, allR.size());
+				
+						if(choice2 < allR.size())
+							tripPool.push_back(allR[choice2]);
+						
+					}while(choice2 != allR.size());
 					
-					cout << "Custom trip function"    << endl;
-					
+					cout << tripPool[0]->getName() << endl;
+					*shortest = *tripPool[0];
+					c = 0;
+					for(int i = 1; i < tripPool.size(); i++)
+					{
+						cout << tripPool[i]->getName() << endl;
+						if(shortest->getDistToSC() > tripPool[i]->getDistToSC() && tripPool[i]->getName() != "Empty")
+						{
+							*shortest = *tripPool[i];
+							c = i;
+						}
+					}
+
+					tripping(*shortest, tripPool, trip, tripPool.size() - 1);
+					distanceType::totalDist += shortest->getDistToSC();
+
+					executeTrip(trip);
+					cout << "The total distance for the trip was: " << distanceType::totalDist << endl;
 					break;
 				}
 			case 0:	 break;
 			default: cout << "error";
 		}
 	}while(choice != 0);
-	
-	//delete shortest;
 }
 
 void executeTrip(queue <cartType *> &trip)
@@ -317,12 +376,13 @@ void executeTrip(queue <cartType *> &trip)
 		trip.pop();
 		
 		temp->addToCart();
-	}while(!trip.empty());
+	}while(!(trip.empty()));
 }
 
 void adminEdit(vector <cartType *> &pool)
 {
 	int choice = 0;
+	int choice2 = 0;
 	
 	do
 	{
@@ -339,19 +399,28 @@ void adminEdit(vector <cartType *> &pool)
 		{
 			case 1:
 				{
-					cout << "Add restaurant function" << endl;
+					cout << "Add restaurant:" << endl;
+					addRestaurant(pool);
 					break;
 				}
 			
 			case 2:
 				{
 					cout<<"Delete restaurant function"<<endl;
+					printRestaurants(pool);
+					choice2 = IntInput("Choocse restaurant to delete: ", 0, pool.size());
+
+					pool.erase(pool.begin() + choice2);
+					cout << "Erased.\n";
 					break;
 				}
 				
 			case 3:
 				{
 					cout<<"Edit restaurant function"<<endl;
+					printRestaurants(pool);
+					choice2 = IntInput("Choocse restaurant to edit: ", 0, pool.size() - 1);
+					pool[choice2]->updateInfo();
 					break;
 				}
 

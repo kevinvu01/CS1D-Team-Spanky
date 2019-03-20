@@ -12,6 +12,7 @@ using namespace std;
 
 class cartType: public restaurantType
 {
+	//friend void tripping(cartType &resty, vector<cartType *> &pool, queue <cartType *> &trip, int n);
 	using restaurantType::cart;
 	using restaurantType::revenue;
 public: 
@@ -33,13 +34,7 @@ public:
   //printCart - prints the items of the cart with numbers
   //Postcondition - outputs to screen the cart with heading and numbers
   void printCart();
-  
-  //selectionMenu 
-  //description: menu system to display cart, and allow options to delete items, checkout or return
-  //preconditions: cart should have items in it and restaurant menu should be populated
-  //postconditions: will not exit function until the user inputs 0. Can enter checkout() which can update revenue
-  void selectionMenu();
-  
+    
   //checkout
   //description - takes in the cart and calculates the total, updates the renevue, and returns, or returns with no changes
   //preconditions - cart should have items in it
